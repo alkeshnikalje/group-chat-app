@@ -35,6 +35,7 @@ export default function Signup() {
         <input
           type="text"
           className="w-full rounded-lg border px-3 py-2 focus:border-blue-500 focus:outline-none"
+          value={name}
           onChange={(e) => setName(e.target.value)}
         />
 
@@ -42,6 +43,7 @@ export default function Signup() {
         <input
           type="email"
           className="w-full rounded-lg border px-3 py-2 focus:border-blue-500 focus:outline-none"
+          value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
 
@@ -49,6 +51,7 @@ export default function Signup() {
         <input
           type="text"
           className="w-full rounded-lg border px-3 py-2 focus:border-blue-500 focus:outline-none"
+          value={phNumber}
           onChange={(e) => setPhNumber(e.target.value)}
         />
 
@@ -56,6 +59,7 @@ export default function Signup() {
         <input
           type="password"
           className="w-full rounded-lg border px-3 py-2 focus:border-blue-500 focus:outline-none"
+          value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
 

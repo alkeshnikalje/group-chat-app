@@ -1,12 +1,36 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 
 export default function AppBar() {
   const [user, setUser] = useState(null);
 
+  const getUser = async () => {
+    try {
+      const res = await axios.get("http://localhost:3000/api/user/me", {
+        headers: { Authorization: localStorage.getItem("token") },
+      });
+      setUser(res.data.user.name);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    getUser();
+  }, []);
+
+  const handleClick = () => {
+    localStorage.removeItem("token");
+    window.location.href = "/signin";
+  };
+
   const userNameAndLogoutButton = user && (
     <div className="flex items-center space-x-4">
       <span className="text-lg font-bold text-gray-700">{user}</span>
-      <button className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 focus:outline-none">
+      <button
+        className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 focus:outline-none"
+        onClick={handleClick}
+      >
         Logout
       </button>
     </div>
