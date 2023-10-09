@@ -1,6 +1,7 @@
+import { Link } from "react-router-dom";
 export default function SignIn() {
   return (
-    <div className="flex h-screen items-center justify-center">
+    <div className=" relative flex h-screen items-center justify-center">
       <form className="w-96 rounded-lg border p-4">
         <label className="mb-2 mt-4 block text-gray-700">Email</label>
         <input
@@ -21,6 +22,14 @@ export default function SignIn() {
           Sign in
         </button>
       </form>
+      <div className="absolute left-0 top-48 w-full p-4 text-center">
+        <p className="text-lg text-gray-700">
+          New here?{" "}
+          <Link to="/signup" className="text-blue-500 hover:underline">
+            Click here to sign up
+          </Link>
+        </p>
+      </div>
     </div>
   );
 }
