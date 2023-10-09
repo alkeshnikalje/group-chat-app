@@ -57,3 +57,13 @@ exports.login = async (req, res) => {
     return res.status(500).json({ success: false, msg: err.message });
   }
 };
+
+exports.getMe = async (req, res) => {
+  try {
+    const id = req.user.id;
+    const user = await User.findByPk(id);
+    return res.json({ success: true, user });
+  } catch (err) {
+    return res.status(500).json({ success: false, msg: err.message });
+  }
+};
