@@ -4,11 +4,16 @@ const cors = require("cors");
 const sequelize = require("./util/database");
 const User = require("./models/user");
 const userRouter = require("./routes/user");
+const Chat = require("./models/chat");
+const chatRouter = require("./routes/chat");
 const app = express();
 app.use(express.json());
 app.use(cors());
 
+User.hasMany(Chat);
+
 app.use("/api/user", userRouter);
+app.use("/api/user", chatRouter);
 sequelize
   .sync({ alter: true })
   .then(() => {

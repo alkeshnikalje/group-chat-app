@@ -22,8 +22,8 @@ export default function SignIn() {
       );
       localStorage.setItem("token", res.data.token);
       window.location.href = "/main";
-    } catch (err) {
-      console.log(err);
+    } catch (err: any) {
+      setError(err.response.data.msg);
     }
   };
 

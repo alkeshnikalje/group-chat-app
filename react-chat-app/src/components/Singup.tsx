@@ -10,6 +10,10 @@ export default function Signup() {
   const navigate = useNavigate();
   const handleOnSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!name || !email || !password || !phNumber) {
+      alert("fill something in the input man!");
+      return;
+    }
     const userObj = {
       name,
       email,
