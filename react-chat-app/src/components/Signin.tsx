@@ -1,12 +1,17 @@
 import axios from "axios";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      if (!email || !password) {
+        alert("fill something in the input man!");
+        return;
+      }
       const userObj = {
         email,
         password,
@@ -17,8 +22,8 @@ export default function SignIn() {
       );
       localStorage.setItem("token", res.data.token);
       window.location.href = "/main";
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -51,10 +56,13 @@ export default function SignIn() {
       <div className="absolute left-0 top-48 w-full p-4 text-center">
         <p className="text-lg text-gray-700">
           New here?{" "}
-          <Link to="/signup" className="text-blue-500 hover:underline">
+          <Link to="/" className="text-blue-500 hover:underline">
             Click here to sign up
           </Link>
         </p>
+      </div>
+      <div className="absolute left-0 top-64 w-full p-4 text-center">
+        <p className="text-lg text-red-500">{error}</p>
       </div>
     </div>
   );
