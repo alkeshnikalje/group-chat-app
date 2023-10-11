@@ -16,7 +16,9 @@ export default function ChatSection({
         >
           <div
             className={`rounded-lg p-2 ${
-              message.name === user ? "self-end " : "bg-gray-300"
+              message.name === user
+                ? "self-end bg-blue-500 text-white"
+                : "bg-gray-300"
             }`}
           >
             {message.name === user ? (
