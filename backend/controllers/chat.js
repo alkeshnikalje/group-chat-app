@@ -16,3 +16,12 @@ exports.sendText = async (req, res) => {
     return res.status(500).json({ success: false, msg: err.message });
   }
 };
+
+exports.getMessages = async (req, res) => {
+  try {
+    const chats = await Chat.findAll();
+    return res.status(200).json({ success: true, chats });
+  } catch (err) {
+    return res.status(500).json({ success: false, msg: err.message });
+  }
+};

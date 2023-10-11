@@ -27,7 +27,7 @@ function App() {
     <Router>
       <AppBar user={user} />
       <Routes>
-        <Route path="/main" element={<Main />} />
+        <Route path="/main" element={<Main user={user} />} />
         <Route path="/" element={<Signup user={user} />} />
         <Route path="/signin" element={<SignIn user={user} />} />
       </Routes>
