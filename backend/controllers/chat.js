@@ -1,3 +1,4 @@
+const User = require("../models/user");
 const Chat = require("../models/chat");
 exports.sendText = async (req, res) => {
   try {
@@ -8,7 +9,8 @@ exports.sendText = async (req, res) => {
         .status(400)
         .json({ success: false, msg: "you have not written anything" });
     }
-    const newChat = await Chat.create({ text, userId: id });
+    const user = await User.findByPk(id);
+    const newChat = await Chat.create({ text, userId: id, name: user.name });
     return res.status(201).json({ success: true, newChat });
   } catch (err) {
     return res.status(500).json({ success: false, msg: err.message });

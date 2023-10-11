@@ -40,6 +40,7 @@ exports.login = async (req, res) => {
         .json({ success: false, msg: "all fields are required" });
     }
     const user = await User.findOne({ where: { email } });
+    console.log(user.name);
     if (!user) {
       return res.status(404).json({ success: false, msg: "user not found" });
     }

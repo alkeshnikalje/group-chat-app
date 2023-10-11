@@ -1,24 +1,4 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
-
-export default function AppBar() {
-  const [user, setUser] = useState(null);
-
-  const getUser = async () => {
-    try {
-      const res = await axios.get("http://localhost:3000/api/user/me", {
-        headers: { Authorization: localStorage.getItem("token") },
-      });
-      setUser(res.data.user.name);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  useEffect(() => {
-    getUser();
-  }, []);
-
+export default function AppBar({ user }: { user: string | null }) {
   const handleClick = () => {
     localStorage.removeItem("token");
     window.location.href = "/signin";
