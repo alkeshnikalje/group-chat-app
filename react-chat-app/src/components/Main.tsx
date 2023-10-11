@@ -33,7 +33,8 @@ export default function Main({ user }: { user: string | null }) {
     }
   };
   useEffect(() => {
-    getChats();
+    const intervalId = setInterval(getChats, 1000);
+    return () => clearInterval(intervalId);
   }, []);
   return (
     <div className="flex h-screen w-full justify-center bg-gray-100 pt-4">
