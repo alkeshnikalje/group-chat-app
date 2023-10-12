@@ -5,6 +5,7 @@ import ChatForm from "./ChatForm";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { AxiosResponse } from "axios";
+import { useNavigate } from "react-router-dom";
 
 export interface messageObj {
   id: number;
@@ -15,9 +16,9 @@ export interface messageObj {
   userId: number;
 }
 
-export default function Main({ user }: { user: string | null }) {
+export default function Main({ id }: { id: number | null }) {
   const [messages, setMessages] = useState<messageObj[]>([]);
-
+  const navigate = useNavigate();
   const getChats = async () => {
     try {
       const lastMessageId =
@@ -55,9 +56,15 @@ export default function Main({ user }: { user: string | null }) {
   return (
     <div className="flex h-screen w-full justify-center bg-gray-100 pt-4">
       <ChildMain>
-        <ChatHeader />
-        <ChatSection messages={messages} user={user} />
-        <ChatForm setMessages={setMessages} />
+        {id ? (
+          <>
+            <ChatHeader />
+            <ChatSection messages={messages} id={id} />
+            <ChatForm setMessages={setMessages} />
+          </>
+        ) : (
+          <>{navigate("/signin")}</>
+        )}
       </ChildMain>
     </div>
   );
