@@ -29,7 +29,8 @@ export default function Main({ user }: { user: string | null }) {
         },
       );
       const chats: messageObj[] = res.data.chats;
-      const updatedChats = [...messages, ...chats];
+      const updatedChats =
+        chats.length > 0 ? [...messages, ...chats] : messages;
       setMessages(updatedChats);
       // Update local storage with the merged chats
       localStorage.setItem("messages", JSON.stringify(updatedChats));
