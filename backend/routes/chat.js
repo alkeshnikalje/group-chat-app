@@ -4,5 +4,5 @@ const { sendText, getMessages } = require("../controllers/chat");
 const userAuth = require("../middleware/auth");
 
 router.post("/chats", userAuth, sendText);
-router.get("/chats", userAuth, getMessages);
+router.get("/chats/:chatId", userAuth, getMessages);
 module.exports = router;

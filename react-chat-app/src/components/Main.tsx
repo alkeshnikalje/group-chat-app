@@ -20,21 +20,36 @@ export default function Main({ user }: { user: string | null }) {
 
   const getChats = async () => {
     try {
+      const lastMessageId =
+        messages.length > 0 ? messages[messages.length - 1].id : 0;
       const res: AxiosResponse = await axios.get(
-        "http://localhost:3000/api/user/chats",
+        `http://localhost:3000/api/user/chats/${lastMessageId}`,
         {
           headers: { Authorization: localStorage.getItem("token") },
         },
       );
       const chats: messageObj[] = res.data.chats;
-      setMessages(chats);
+      const updatedChats = [...messages, ...chats];
+      setMessages(updatedChats);
+      // Update local storage with the merged chats
+      localStorage.setItem("messages", JSON.stringify(updatedChats));
     } catch (error) {
       console.log(error);
     }
   };
   useEffect(() => {
+    // Load old messages from local storage when the component mounts
+    const storedMessages = localStorage.getItem("messages");
+    if (storedMessages) {
+      setMessages(JSON.parse(storedMessages));
+    }
+
+    // Fetch new messages at regular intervals
     const intervalId = setInterval(getChats, 1000);
-    return () => clearInterval(intervalId);
+
+    return () => {
+      clearInterval(intervalId);
+    };
   }, []);
   return (
     <div className="flex h-screen w-full justify-center bg-gray-100 pt-4">
