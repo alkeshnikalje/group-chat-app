@@ -3,6 +3,6 @@ const router = express.Router();
 const { sendText, getMessages } = require("../controllers/chat");
 const userAuth = require("../middleware/auth");
 
-router.post("/chats", userAuth, sendText);
-router.get("/chats/:chatId", userAuth, getMessages);
+router.post("/chats/:groupId", userAuth, sendText);
+router.get("/chats/:chatId/group/:groupId", userAuth, getMessages);
 module.exports = router;

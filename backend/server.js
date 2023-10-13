@@ -16,6 +16,7 @@ app.use(cors());
 User.hasMany(Chat);
 User.belongsToMany(Group, { through: UserGroup });
 Group.belongsToMany(User, { through: UserGroup });
+Group.hasMany(Chat);
 
 app.use("/api/user", userRouter);
 app.use("/api/user", chatRouter);

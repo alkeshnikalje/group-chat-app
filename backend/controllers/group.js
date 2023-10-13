@@ -10,7 +10,11 @@ exports.createGroup = async (req, res) => {
         .json({ success: false, msg: "name cannot be empty" });
     }
     const group = await Group.create({ name, createdBy: req.user.id });
-    await UserGroup.create({ userId: group.createdBy, groupId: group.id });
+    await UserGroup.create({
+      userId: group.createdBy,
+      groupId: group.id,
+      isAdmin: true,
+    });
     return res.status(201).json({ success: true, group });
   } catch (err) {
     return res.status(500).json({ success: false, msg: err.message });
@@ -27,7 +31,7 @@ exports.deleteGroup = async (req, res) => {
     if (group.createdBy !== req.user.id) {
       return res.status(401).json({
         success: false,
-        msg: "you are not allowed to delete the group. Only admin can",
+        msg: "you are not allowed to delete the group.",
       });
     }
     await group.destroy();
@@ -58,12 +62,10 @@ exports.addUser = async (req, res) => {
     }
     const groupUser = await UserGroup.findOne({ where: { userId } });
     if (groupUser) {
-      return res
-        .status(404)
-        .json({
-          success: false,
-          msg: `${user.name} already exists in the group`,
-        });
+      return res.status(404).json({
+        success: false,
+        msg: `${user.name} already exists in the group`,
+      });
     }
     await UserGroup.create({ userId, groupId });
     return res.status(201).json({
