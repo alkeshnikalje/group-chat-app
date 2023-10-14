@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { AxiosResponse } from "axios";
 import { useNavigate } from "react-router-dom";
+import GroupContainer from "./Groupcontainer";
 
 export interface messageObj {
   id: number;
@@ -55,6 +56,7 @@ export default function Main({ id }: { id: number | null }) {
   }, []);
   return (
     <div className="flex h-screen w-full justify-center bg-gray-100 pt-4">
+      <GroupContainer />
       <ChildMain>
         {id ? (
           <>

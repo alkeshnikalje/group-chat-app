@@ -17,10 +17,6 @@ User.hasMany(Chat);
 User.belongsToMany(Group, { through: UserGroup });
 Group.belongsToMany(User, { through: UserGroup });
 Group.hasMany(Chat);
-
-app.use("/api/user", userRouter);
-app.use("/api/user", chatRouter);
-app.use("/api/user", groupRouter);
 sequelize
   .sync({ alter: true })
   .then(() => {
@@ -29,6 +25,9 @@ sequelize
   .catch((err) => {
     console.log(err);
   });
+app.use("/api/user", userRouter);
+app.use("/api/user", chatRouter);
+app.use("/api/user", groupRouter);
 
 app.listen(process.env.PORT, () => {
   console.log(`server running`);

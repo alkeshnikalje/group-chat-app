@@ -41,6 +41,30 @@ exports.deleteGroup = async (req, res) => {
   }
 };
 
+exports.getGroups = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const userBelongsTo = await Group.findAll({
+      include: [
+        {
+          model: User,
+          through: {
+            model: UserGroup,
+            where: { userId },
+          },
+          attributes: [], // Exclude attributes from the User model
+        },
+      ],
+    });
+    if (!userBelongsTo) {
+      return res.status(404).json({ success: false, msg: "groups not found" });
+    }
+    return res.status(200).json({ success: true, userBelongsTo });
+  } catch (err) {
+    return res.status(500).json({ success: false, msg: err.message });
+  }
+};
+
 exports.addUser = async (req, res) => {
   try {
     const { userId, groupId } = req.params;
@@ -60,7 +84,7 @@ exports.addUser = async (req, res) => {
         .status(401)
         .json({ success: false, msg: "you cannot add user" });
     }
-    const groupUser = await UserGroup.findOne({ where: { userId } });
+    const groupUser = await UserGroup.findOne({ where: { userId, groupId } });
     if (groupUser) {
       return res.status(404).json({
         success: false,
