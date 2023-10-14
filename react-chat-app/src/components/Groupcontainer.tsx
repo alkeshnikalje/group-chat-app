@@ -1,10 +1,10 @@
-export default function GroupContainer() {
-  const dummyGroups = [
-    { id: 1, name: "Group 1" },
-    { id: 2, name: "Group 2" },
-    { id: 3, name: "Group 3" },
-  ];
-
+import { groupsObj } from "./Main";
+interface PropTypes {
+  groups: groupsObj[];
+  isActive: groupsObj | null;
+  setIsActive: React.Dispatch<React.SetStateAction<groupsObj | null>>;
+}
+export default function GroupContainer(props: PropTypes) {
   return (
     <div className=" h-5/6 w-1/4  bg-white p-4">
       <form className="mb-4 border">
@@ -19,8 +19,17 @@ export default function GroupContainer() {
       </form>
       <div className=" text-center text-lg font-semibold">Groups</div>
       <div className="h-[calc(100%-6rem)] overflow-y-auto ">
-        {dummyGroups.map((group) => (
-          <div key={group.id} className="mb-2 rounded-md p-2 hover:bg-gray-100">
+        {props.groups.map((group) => (
+          <div
+            key={group.id}
+            className={`mb-2 rounded-md p-2 hover:bg-gray-100 ${
+              group.id === props.isActive?.id ? "bg-gray-100" : ""
+            }`}
+            onClick={() => {
+              console.log("Clicked on group:", group);
+              props.setIsActive(group);
+            }}
+          >
             {group.name}
           </div>
         ))}

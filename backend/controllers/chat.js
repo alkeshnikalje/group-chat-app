@@ -50,12 +50,7 @@ exports.getMessages = async (req, res) => {
         .json({ success: false, msg: "cannot access messages" });
     }
     const chats = await Chat.findAll({
-      where: {
-        groupId: req.params.groupId,
-        id: {
-          [Op.gt]: req.params.chatId,
-        },
-      },
+      where: { groupId: req.params.groupId },
     });
     return res.status(200).json({ success: true, chats });
   } catch (err) {
