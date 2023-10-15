@@ -48,8 +48,6 @@ export default function Main({ id }: { id: number | null }) {
   const navigate = useNavigate();
   const getChats = async () => {
     try {
-      const lastMessageId =
-        messages.length > 0 ? messages[messages.length - 1].id : 0;
       if (!isActive) {
         return; // Do nothing if isActive is null
       }
@@ -89,6 +87,7 @@ export default function Main({ id }: { id: number | null }) {
           groups={groups}
           isActive={isActive}
           setIsActive={setIsActive}
+          setGroups={setGroups}
         />
       )}
       {isActive && (

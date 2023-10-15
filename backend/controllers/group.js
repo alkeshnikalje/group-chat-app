@@ -1,6 +1,7 @@
 const Group = require("../models/group");
 const User = require("../models/user");
 const UserGroup = require("../models/usergroup");
+const sequelize = require("../util/database");
 exports.createGroup = async (req, res) => {
   try {
     const { name } = req.body;
@@ -44,21 +45,23 @@ exports.deleteGroup = async (req, res) => {
 exports.getGroups = async (req, res) => {
   try {
     const userId = req.user.id;
-    const userBelongsTo = await Group.findAll({
-      include: [
-        {
-          model: User,
-          through: {
-            model: UserGroup,
-            where: { userId },
-          },
-          attributes: [], // Exclude attributes from the User model
-        },
-      ],
+
+    const query = `
+    SELECT g.id, g.name, ug.isAdmin
+    FROM \`groups\` AS g
+    JOIN usersgroups AS ug ON g.id = ug.groupId
+    WHERE ug.userId = :userId
+  `;
+
+    const userBelongsTo = await sequelize.query(query, {
+      replacements: { userId },
+      type: sequelize.QueryTypes.SELECT,
     });
+
     if (!userBelongsTo) {
-      return res.status(404).json({ success: false, msg: "groups not found" });
+      return res.status(404).json({ success: false, msg: "Groups not found" });
     }
+
     return res.status(200).json({ success: true, userBelongsTo });
   } catch (err) {
     return res.status(500).json({ success: false, msg: err.message });

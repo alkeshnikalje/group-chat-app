@@ -9,13 +9,23 @@ const chatRouter = require("./routes/chat");
 const Group = require("./models/group");
 const UserGroup = require("./models/usergroup");
 const groupRouter = require("./routes/group");
+const userGroupRouter = require("./routes/usergroup");
 const app = express();
 app.use(express.json());
 app.use(cors());
 
 User.hasMany(Chat);
-User.belongsToMany(Group, { through: UserGroup });
-Group.belongsToMany(User, { through: UserGroup });
+
+// Group model
+Group.belongsToMany(User, {
+  through: UserGroup,
+});
+
+// User model
+User.belongsToMany(Group, {
+  through: UserGroup,
+});
+
 Group.hasMany(Chat);
 sequelize
   .sync({ alter: true })
