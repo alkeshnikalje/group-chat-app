@@ -16,6 +16,7 @@ exports.createGroup = async (req, res) => {
       groupId: group.id,
       isAdmin: true,
     });
+    group.dataValues.isAdmin = true;
     return res.status(201).json({ success: true, group });
   } catch (err) {
     return res.status(500).json({ success: false, msg: err.message });
@@ -47,7 +48,7 @@ exports.getGroups = async (req, res) => {
     const userId = req.user.id;
 
     const query = `
-    SELECT g.id, g.name, ug.isAdmin
+    SELECT g.id, g.name, g.createdBy, ug.isAdmin
     FROM \`groups\` AS g
     JOIN usersgroups AS ug ON g.id = ug.groupId
     WHERE ug.userId = :userId

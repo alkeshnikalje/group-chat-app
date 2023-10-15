@@ -20,8 +20,7 @@ export interface groupsObj {
   id: number;
   name: string;
   createdBy: number;
-  createdAt: Date | string;
-  updatedAt: Date | string;
+  isAdmin: boolean;
 }
 export default function Main({ id }: { id: number | null }) {
   const [messages, setMessages] = useState<messageObj[]>([]);
@@ -88,6 +87,7 @@ export default function Main({ id }: { id: number | null }) {
           isActive={isActive}
           setIsActive={setIsActive}
           setGroups={setGroups}
+          id={id}
         />
       )}
       {isActive && (

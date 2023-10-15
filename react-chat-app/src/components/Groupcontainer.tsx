@@ -6,10 +6,10 @@ interface PropTypes {
   isActive: groupsObj | null;
   setIsActive: React.Dispatch<React.SetStateAction<groupsObj | null>>;
   setGroups: React.Dispatch<React.SetStateAction<groupsObj[]>>;
+  id: number | null;
 }
 export default function GroupContainer(props: PropTypes) {
   const [groupName, setGroupName] = useState<string>("");
-  const [isAdmin, setIsAdmin] = useState(false);
 
   const handleOnSubmi = async (e: React.FormEvent) => {
     try {
@@ -26,6 +26,34 @@ export default function GroupContainer(props: PropTypes) {
       );
       const newGroup = res.data.group;
       props.setGroups((prevGroups) => [...prevGroups, newGroup]);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleDelete = async (groupId: number) => {
+    try {
+      const isConfirmed = window.confirm(
+        "Are you sure you want to delete this group?",
+      );
+      if (!isConfirmed) {
+        return;
+      }
+      const res = await axios.delete(
+        `http://localhost:3000/api/user/group/${groupId}`,
+        {
+          headers: { Authorization: localStorage.getItem("token") },
+        },
+      );
+      if (res.data.success) {
+        const filteredGroups = props.groups.filter(
+          (group) => group.id !== groupId,
+        );
+        props.setGroups(filteredGroups);
+        if (filteredGroups.length > 0) {
+          props.setIsActive(filteredGroups[filteredGroups.length - 1]);
+        }
+      }
     } catch (err) {
       console.log(err);
     }
@@ -49,17 +77,37 @@ export default function GroupContainer(props: PropTypes) {
         {props.groups.map((group) => (
           <div
             key={group.id}
-            className={`mb-2 flex rounded-md p-2 hover:bg-gray-100 ${
-              group.id === props.isActive?.id ? "bg-gray-100" : ""
+            className={`mb-2 flex items-center justify-between rounded-md p-2 ${
+              group.id !== props.isActive?.id ? "hover:bg-gray-300" : ""
+            }  ${
+              group.id === props.isActive?.id ? "bg-gray-300" : "bg-gray-100"
             }`}
             onClick={() => {
-              console.log("Clicked on group:", group);
               props.setIsActive(group);
             }}
           >
-            {group.name}
-            {<button></button>}
-            <button></button>
+            <span>{group.name}</span>
+            {group.isAdmin ? (
+              <div className="ml-2 flex space-x-2">
+                <button className="rounded-md bg-blue-500 p-2 text-white">
+                  Add User
+                </button>
+                {group.createdBy === props.id ? (
+                  <button
+                    className="rounded-md bg-red-500 p-2 text-white"
+                    onClick={() => {
+                      handleDelete(group.id);
+                    }}
+                  >
+                    Delete
+                  </button>
+                ) : (
+                  ""
+                )}
+              </div>
+            ) : (
+              ""
+            )}
           </div>
         ))}
       </div>
