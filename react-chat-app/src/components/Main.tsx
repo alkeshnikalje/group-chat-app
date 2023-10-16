@@ -80,7 +80,7 @@ export default function Main({ id }: { id: number | null }) {
     };
   }, [isActiveId]);
   return (
-    <div className="flex h-screen w-full justify-center bg-gray-100 pt-4">
+    <div className="flex h-screen w-full justify-center space-x-2 bg-gray-100 pt-4">
       {id && (
         <GroupContainer
           groups={groups}

@@ -58,6 +58,13 @@ export default function GroupContainer(props: PropTypes) {
       console.log(err);
     }
   };
+
+  const sortGroups = (group: groupsObj) => {
+    props.setIsActive(group);
+    const notSelectedGroups = props.groups.filter((grp) => grp !== group);
+    props.setGroups([group, ...notSelectedGroups]);
+  };
+
   return (
     <div className=" h-5/6 w-1/4  bg-white p-4">
       <form className="mb-4 border" onSubmit={handleOnSubmi}>
@@ -82,9 +89,7 @@ export default function GroupContainer(props: PropTypes) {
             }  ${
               group.id === props.isActive?.id ? "bg-gray-300" : "bg-gray-100"
             }`}
-            onClick={() => {
-              props.setIsActive(group);
-            }}
+            onClick={() => sortGroups(group)}
           >
             <span>{group.name}</span>
             {group.isAdmin ? (

@@ -72,9 +72,10 @@ exports.getGroups = async (req, res) => {
 exports.addUser = async (req, res) => {
   try {
     const { userId, groupId } = req.params;
-    const [group, user] = await Promise.all([
+    const [group, user, groupMember] = await Promise.all([
       Group.findOne({ where: { id: groupId } }),
       User.findOne({ where: { id: userId } }),
+      UserGroup.findOne({ where: { userId: req.user.id, groupId } }),
     ]);
 
     if (!group) {
@@ -83,14 +84,14 @@ exports.addUser = async (req, res) => {
     if (!user) {
       return res.status(404).json({ success: false, msg: "user not found" });
     }
-    if (group.createdBy !== req.user.id) {
+    if (!groupMember.isAdmin) {
       return res
         .status(401)
         .json({ success: false, msg: "you cannot add user" });
     }
     const groupUser = await UserGroup.findOne({ where: { userId, groupId } });
     if (groupUser) {
-      return res.status(404).json({
+      return res.status(403).json({
         success: false,
         msg: `${user.name} already exists in the group`,
       });
@@ -99,6 +100,42 @@ exports.addUser = async (req, res) => {
     return res.status(201).json({
       success: true,
       msg: `${user.name} has been added to the ${group.name}`,
+    });
+  } catch (err) {
+    return res.status(500).json({ success: false, msg: err.message });
+  }
+};
+
+exports.removeUser = async (req, res) => {
+  try {
+    const { userId, groupId } = req.params;
+    const [group, user, groupMember] = await Promise.all([
+      Group.findOne({ where: { id: groupId } }),
+      User.findOne({ where: { id: userId } }),
+      UserGroup.findOne({ where: { userId: req.user.id, groupId } }),
+    ]);
+    if (!group) {
+      return res.status(404).json({ success: false, msg: "Group not found" });
+    }
+    if (!user) {
+      return res.status(404).json({ success: false, msg: "user not found" });
+    }
+    if (!groupMember.isAdmin) {
+      return res
+        .status(401)
+        .json({ success: false, msg: "you cannot remove user" });
+    }
+    const groupUser = await UserGroup.findOne({ where: { userId, groupId } });
+    if (!groupUser) {
+      return res.status(403).json({
+        success: false,
+        msg: `${user.name} not found`,
+      });
+    }
+    await groupUser.destroy();
+    return res.json({
+      success: true,
+      msg: `${user.name} has been removed from the group`,
     });
   } catch (err) {
     return res.status(500).json({ success: false, msg: err.message });
