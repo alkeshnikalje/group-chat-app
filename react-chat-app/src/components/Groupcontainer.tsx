@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { groupsObj } from "./Main";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 interface PropTypes {
   groups: groupsObj[];
   isActive: groupsObj | null;
@@ -10,7 +11,7 @@ interface PropTypes {
 }
 export default function GroupContainer(props: PropTypes) {
   const [groupName, setGroupName] = useState<string>("");
-
+  const navigate = useNavigate();
   const handleOnSubmi = async (e: React.FormEvent) => {
     try {
       e.preventDefault();
@@ -94,7 +95,10 @@ export default function GroupContainer(props: PropTypes) {
             <span>{group.name}</span>
             {group.isAdmin ? (
               <div className="ml-2 flex space-x-2">
-                <button className="rounded-md bg-blue-500 p-2 text-white">
+                <button
+                  className="rounded-md bg-blue-500 p-2 text-white"
+                  onClick={() => navigate(`/users/${group.id}`)}
+                >
                   Add User
                 </button>
                 {group.createdBy === props.id ? (
