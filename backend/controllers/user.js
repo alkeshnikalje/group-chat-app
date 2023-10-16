@@ -68,3 +68,15 @@ exports.getMe = async (req, res) => {
     return res.status(500).json({ success: false, msg: err.message });
   }
 };
+
+exports.getAllUsers = async (req, res) => {
+  try {
+    const users = await User.findAll({
+      attributes: ["id", "name", "email", "phoneNumber"],
+    });
+
+    return res.status(200).json({ success: true, users });
+  } catch (err) {
+    return res.status(500).json({ success: false, msg: err.message });
+  }
+};

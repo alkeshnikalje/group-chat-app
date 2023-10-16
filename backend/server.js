@@ -38,7 +38,7 @@ sequelize
 app.use("/api/user", userRouter);
 app.use("/api/user", chatRouter);
 app.use("/api/user", groupRouter);
-
+app.use("/api/user", userGroupRouter);
 app.listen(process.env.PORT, () => {
   console.log(`server running`);
 });

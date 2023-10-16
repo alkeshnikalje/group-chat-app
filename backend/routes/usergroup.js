@@ -1,7 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const userAuth = require("../middleware/auth");
-// const { getAdmin } = require("../controllers/usergroup");
-// router.get("/admin/:groupId", userAuth, getAdmin);
+
+const { makeAdmin, getGroupUsers } = require("../controllers/usergroup");
+
+router.put("/:userId/:groupId", userAuth, makeAdmin);
+router.get("/:groupId", userAuth, getGroupUsers);
 
 module.exports = router;

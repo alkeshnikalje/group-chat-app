@@ -84,6 +84,9 @@ exports.addUser = async (req, res) => {
     if (!user) {
       return res.status(404).json({ success: false, msg: "user not found" });
     }
+    if (!groupMember) {
+      return res.status(404).json({ success: false, msg: "admin not found" });
+    }
     if (!groupMember.isAdmin) {
       return res
         .status(401)
@@ -96,10 +99,17 @@ exports.addUser = async (req, res) => {
         msg: `${user.name} already exists in the group`,
       });
     }
-    await UserGroup.create({ userId, groupId });
+    const addedUser = await UserGroup.create({ userId, groupId });
+    const userObj = {
+      id: user.id,
+      name: user.name,
+      phoneNumber: user.phoneNumber,
+      isAdmin: addedUser.isAdmin,
+    };
     return res.status(201).json({
       success: true,
       msg: `${user.name} has been added to the ${group.name}`,
+      userObj,
     });
   } catch (err) {
     return res.status(500).json({ success: false, msg: err.message });
@@ -120,6 +130,9 @@ exports.removeUser = async (req, res) => {
     if (!user) {
       return res.status(404).json({ success: false, msg: "user not found" });
     }
+    if (!groupMember) {
+      return res.status(404).json({ success: false, msg: "admin not found" });
+    }
     if (!groupMember.isAdmin) {
       return res
         .status(401)
@@ -127,7 +140,7 @@ exports.removeUser = async (req, res) => {
     }
     const groupUser = await UserGroup.findOne({ where: { userId, groupId } });
     if (!groupUser) {
-      return res.status(403).json({
+      return res.status(404).json({
         success: false,
         msg: `${user.name} not found`,
       });

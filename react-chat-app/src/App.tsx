@@ -5,6 +5,7 @@ import Signup from "./components/Singup";
 import SignIn from "./components/Signin";
 import AppBar from "./components/AppBar";
 import Main from "./components/Main";
+import Users from "./components/Users";
 function App() {
   const [user, setUser] = useState<null | string>(null);
   const [id, setId] = useState<number | null>(null);
@@ -32,6 +33,7 @@ function App() {
         <Route path="/main" element={<Main id={id} />} />
         <Route path="/" element={<Signup user={user} />} />
         <Route path="/signin" element={<SignIn user={user} />} />
+        <Route path="/users" element={<Users />} />
       </Routes>
     </Router>
   );
