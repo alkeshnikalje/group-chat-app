@@ -1,16 +1,25 @@
-import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+
 export default function SignIn({ user }: { user: string | null }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loggedIn, setLoggedIn] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (loggedIn) {
+      navigate("/main");
+    }
+  }, [loggedIn, navigate]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       if (!email || !password) {
-        alert("fill something in the input man!");
+        alert("Fill in all the input fields!");
         return;
       }
       const userObj = {
@@ -22,14 +31,14 @@ export default function SignIn({ user }: { user: string | null }) {
         userObj,
       );
       localStorage.setItem("token", res.data.token);
-      window.location.href = "/main";
+      setLoggedIn(true);
     } catch (err: any) {
       setError(err.response.data.msg);
     }
   };
 
   return (
-    <div className=" relative flex h-screen items-center justify-center">
+    <div className="relative flex h-screen items-center justify-center">
       {!user ? (
         <>
           <form className="w-96 rounded-lg border p-4" onSubmit={handleSubmit}>
@@ -69,7 +78,11 @@ export default function SignIn({ user }: { user: string | null }) {
           </div>
         </>
       ) : (
-        <>{navigate("/main")}</>
+        <>
+          <Link to="/main" className="text-xl text-blue-500 hover:underline">
+            Go to Main
+          </Link>
+        </>
       )}
     </div>
   );

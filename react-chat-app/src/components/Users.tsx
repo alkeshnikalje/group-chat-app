@@ -1,18 +1,10 @@
 import { useState } from "react";
 import { UsersObj } from "../App";
-import { gUsers } from "../App";
+
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { AxiosError } from "axios";
-export default function Users({
-  users,
-  groupUsers,
-  setGroupUsers,
-}: {
-  users: UsersObj[];
-  groupUsers: gUsers[];
-  setGroupUsers: React.Dispatch<React.SetStateAction<gUsers[]>>;
-}) {
+
+export default function Users({ users }: { users: UsersObj[] }) {
   const params = useParams();
   const [query, setQuery] = useState("");
 

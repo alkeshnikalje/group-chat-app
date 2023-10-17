@@ -64,16 +64,7 @@ function App() {
         <Route path="/main" element={<Main id={id} />} />
         <Route path="/" element={<Signup user={user} />} />
         <Route path="/signin" element={<SignIn user={user} />} />
-        <Route
-          path="/users/:gId"
-          element={
-            <Users
-              users={users}
-              groupUsers={groupUsers}
-              setGroupUsers={setGroupUsers}
-            />
-          }
-        />
+        <Route path="/users/:gId" element={<Users users={users} />} />
         <Route
           path="/groupusers"
           element={<GroupUsers groupUsers={groupUsers} />}

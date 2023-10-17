@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -7,11 +7,19 @@ export default function Signup({ user }: { user: string | null }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [phNumber, setPhNumber] = useState("");
+  const [redirect, setRedirect] = useState(false); // New state to handle redirection
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (redirect) {
+      navigate("/signin");
+    }
+  }, [redirect, navigate]);
+
   const handleOnSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name || !email || !password || !phNumber) {
-      alert("fill something in the input man!");
+      alert("Fill in all the input fields!");
       return;
     }
     const userObj = {
@@ -26,12 +34,13 @@ export default function Signup({ user }: { user: string | null }) {
         userObj,
       );
       if (res.data.success) {
-        navigate("/signin");
+        setRedirect(true);
       }
     } catch (err) {
       console.log(err);
     }
   };
+
   return (
     <div className="relative flex h-screen items-center justify-center">
       {!user ? (
@@ -93,7 +102,11 @@ export default function Signup({ user }: { user: string | null }) {
           </div>
         </>
       ) : (
-        <>{navigate("/main")}</>
+        <div className="absolute left-0 top-64 w-full p-4 text-center">
+          <p className="text-xl text-blue-500 hover:underline">
+            <Link to="/main">Go to Main</Link>
+          </p>
+        </div>
       )}
     </div>
   );
