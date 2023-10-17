@@ -1,10 +1,16 @@
 import { useState } from "react";
 import { UsersObj } from "../App";
 
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 
-export default function Users({ users }: { users: UsersObj[] }) {
+export default function Users({
+  users,
+  id,
+}: {
+  users: UsersObj[];
+  id: number | null;
+}) {
   const params = useParams();
   const [query, setQuery] = useState("");
 
@@ -55,20 +61,30 @@ export default function Users({ users }: { users: UsersObj[] }) {
           </button>
         </form>
         <div className="h-[90%] max-h-[calc(100vh-10rem)] overflow-y-auto">
-          {filteredUsers.map((user) => (
-            <div
-              key={user.id}
-              className=" mb-2 flex items-center justify-between rounded bg-gray-300 p-2"
-            >
-              <span className="font-semibold">{user.name}</span>
-              <button
-                className="rounded bg-blue-500 p-2 text-white"
-                onClick={() => handleOnclick(user.id, Number(params.gId))}
+          {filteredUsers
+            .filter((u) => u.id !== id)
+            .map((user) => (
+              <div
+                key={user.id}
+                className=" mb-2 flex items-center justify-between rounded bg-gray-300 p-2"
               >
-                Add User
-              </button>
-            </div>
-          ))}
+                <span className="font-semibold">{user.name}</span>
+                <button
+                  className="rounded bg-blue-500 p-2 text-white"
+                  onClick={() => handleOnclick(user.id, Number(params.gId))}
+                >
+                  Add User
+                </button>
+              </div>
+            ))}
+        </div>
+        <div className="mt-4 text-center">
+          <Link
+            to="/main"
+            className="rounded bg-blue-500 p-2 font-semibold text-white"
+          >
+            Go back to chatting
+          </Link>
         </div>
       </div>
     </>

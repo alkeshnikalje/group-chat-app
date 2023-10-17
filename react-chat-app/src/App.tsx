@@ -25,6 +25,7 @@ function App() {
   const [id, setId] = useState<number | null>(null);
   const [users, setUsers] = useState<UsersObj[]>([]);
   const [groupUsers, setGroupUsers] = useState<gUsers[]>([]);
+
   const getUser = async () => {
     try {
       const res = await axios.get("http://localhost:3000/api/user/me", {
@@ -43,10 +44,7 @@ function App() {
         headers: { Authorization: localStorage.getItem("token") },
       });
       const fetchedUsers: UsersObj[] = res.data.users;
-      const filteredUsers = fetchedUsers.filter(
-        (user: UsersObj) => user.id !== id,
-      );
-      setUsers(filteredUsers);
+      setUsers(fetchedUsers);
     } catch (error) {
       console.log(error);
     }
@@ -61,14 +59,19 @@ function App() {
     <Router>
       <AppBar user={user} />
       <Routes>
-        <Route path="/main" element={<Main id={id} />} />
+        <Route
+          path="/main"
+          element={
+            <Main
+              id={id}
+              setGroupUsers={setGroupUsers}
+              groupUsers={groupUsers}
+            />
+          }
+        />
         <Route path="/" element={<Signup user={user} />} />
         <Route path="/signin" element={<SignIn user={user} />} />
-        <Route path="/users/:gId" element={<Users users={users} />} />
-        <Route
-          path="/groupusers"
-          element={<GroupUsers groupUsers={groupUsers} />}
-        />
+        <Route path="/users/:gId" element={<Users users={users} id={id} />} />
       </Routes>
     </Router>
   );

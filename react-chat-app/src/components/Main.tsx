@@ -7,6 +7,8 @@ import axios from "axios";
 import { AxiosResponse } from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import GroupContainer from "./Groupcontainer";
+import GroupUsers from "./GroupUsers";
+import { gUsers } from "../App";
 
 export interface messageObj {
   id: number;
@@ -22,12 +24,21 @@ export interface groupsObj {
   createdBy: number;
   isAdmin: boolean;
 }
-export default function Main({ id }: { id: number | null }) {
+export default function Main({
+  id,
+  setGroupUsers,
+  groupUsers,
+}: {
+  id: number | null;
+  setGroupUsers: React.Dispatch<React.SetStateAction<gUsers[]>>;
+  groupUsers: gUsers[];
+}) {
   const [messages, setMessages] = useState<messageObj[]>([]);
   const [groups, setGroups] = useState<groupsObj[]>([]);
   const [isActive, setIsActive] = useState<groupsObj | null>(null);
-
+  const [isMembersActive, setIsMembersActive] = useState(false);
   const isActiveId = isActive?.id;
+  const numberOfUsersInTheGroup = groupUsers.length;
   const getGroups = async () => {
     try {
       const res = await axios.get("http://localhost:3000/api/user/group", {
@@ -51,7 +62,7 @@ export default function Main({ id }: { id: number | null }) {
         return; // Do nothing if isActive is null
       }
       const res: AxiosResponse = await axios.get(
-        `http://localhost:3000/api/user/chats/group/${isActiveId}`,
+        `http://localhost:3000/api/user/chats/group/${isActive.id}`,
         {
           headers: { Authorization: localStorage.getItem("token") },
         },
@@ -64,9 +75,28 @@ export default function Main({ id }: { id: number | null }) {
       console.log(error);
     }
   };
+
+  const getGroupUsers = async () => {
+    try {
+      if (!isActive) {
+        return;
+      }
+      const res: AxiosResponse = await axios.get(
+        `http://localhost:3000/api/user/${isActive.id}`,
+        {
+          headers: { Authorization: localStorage.getItem("token") },
+        },
+      );
+      const fetchedGroupUsers: gUsers[] = res.data.groupBelongsTo;
+      setGroupUsers(fetchedGroupUsers);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   useEffect(() => {
     // Load old messages from local storage when the component mounts
-
+    getGroupUsers();
     // const storedMessages = localStorage.getItem("messages");
     // if (storedMessages) {
     //   setMessages(JSON.parse(storedMessages));
@@ -79,8 +109,9 @@ export default function Main({ id }: { id: number | null }) {
       clearInterval(intervalId);
     };
   }, [isActiveId]);
-  return (
-    <div className="flex h-screen w-full justify-center space-x-2 bg-gray-100 pt-4">
+
+  const mainElements = (
+    <div className="flex h-screen w-full  justify-center space-x-2 bg-gray-100 pt-4">
       {id && (
         <GroupContainer
           groups={groups}
@@ -92,7 +123,11 @@ export default function Main({ id }: { id: number | null }) {
       )}
       {isActive && (
         <ChildMain>
-          <ChatHeader isActive={isActive} />
+          <ChatHeader
+            isActive={isActive}
+            numberOfUsersInTheGroup={numberOfUsersInTheGroup}
+            setIsMembersActive={setIsMembersActive}
+          />
           <ChatSection messages={messages} id={id} />
           <ChatForm setMessages={setMessages} />
         </ChildMain>
@@ -105,5 +140,19 @@ export default function Main({ id }: { id: number | null }) {
         </>
       )}
     </div>
+  );
+
+  return (
+    <>
+      {isMembersActive ? (
+        <GroupUsers
+          groupUsers={groupUsers}
+          setIsMembersActive={setIsMembersActive}
+          isActive={isActive}
+        />
+      ) : (
+        mainElements
+      )}
+    </>
   );
 }
