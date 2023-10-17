@@ -104,7 +104,9 @@ export default function Signup({ user }: { user: string | null }) {
       ) : (
         <div className="absolute left-0 top-64 w-full p-4 text-center">
           <p className="text-xl text-blue-500 hover:underline">
-            <Link to="/main">Go to Main</Link>
+            <Link to="/main">
+              start creating groups and chatting with your friends
+            </Link>
           </p>
         </div>
       )}

@@ -80,7 +80,7 @@ export default function SignIn({ user }: { user: string | null }) {
       ) : (
         <>
           <Link to="/main" className="text-xl text-blue-500 hover:underline">
-            Go to Main
+            start creating groups and chatting with your friends
           </Link>
         </>
       )}
