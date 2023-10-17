@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "axios";
 
 export default function SignIn({ user }: { user: string | null }) {
@@ -7,13 +7,12 @@ export default function SignIn({ user }: { user: string | null }) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (loggedIn) {
-      navigate("/main");
+      window.location.reload();
     }
-  }, [loggedIn, navigate]);
+  }, [loggedIn]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

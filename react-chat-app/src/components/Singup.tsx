@@ -3,12 +3,12 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export default function Signup({ user }: { user: string | null }) {
+  const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [phNumber, setPhNumber] = useState("");
   const [redirect, setRedirect] = useState(false); // New state to handle redirection
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (redirect) {

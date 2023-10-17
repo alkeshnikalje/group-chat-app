@@ -80,7 +80,11 @@ export default function GroupContainer(props: PropTypes) {
           Create
         </button>
       </form>
-      <div className=" text-center text-lg font-semibold">Your Groups</div>
+      <div className=" text-center text-lg font-semibold">
+        {props.groups.length > 0
+          ? "Your Groups"
+          : "you don't have any groups start creating them"}
+      </div>
       <div className="h-[calc(100%-6rem)] cursor-pointer overflow-y-auto ">
         {props.groups.map((group) => (
           <div

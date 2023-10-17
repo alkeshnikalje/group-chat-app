@@ -5,7 +5,7 @@ import ChatForm from "./ChatForm";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { AxiosResponse } from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import GroupContainer from "./Groupcontainer";
 
 export interface messageObj {
@@ -97,7 +97,13 @@ export default function Main({ id }: { id: number | null }) {
           <ChatForm setMessages={setMessages} />
         </ChildMain>
       )}
-      {!id && <>{navigate("/signin")}</>}
+      {!id && (
+        <>
+          <Link to="/signin" className="text-xl text-blue-500 hover:underline">
+            login first
+          </Link>
+        </>
+      )}
     </div>
   );
 }
