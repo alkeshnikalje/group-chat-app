@@ -149,6 +149,7 @@ export default function Main({
           groupUsers={groupUsers}
           setIsMembersActive={setIsMembersActive}
           isActive={isActive}
+          setGroupUsers={setGroupUsers}
         />
       ) : (
         mainElements

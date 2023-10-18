@@ -1,3 +1,4 @@
+import axios, { AxiosResponse } from "axios";
 import { gUsers } from "../App";
 import { groupsObj } from "./Main";
 
@@ -5,11 +6,53 @@ export default function GroupUsers({
   groupUsers,
   setIsMembersActive,
   isActive,
+  setGroupUsers,
 }: {
   groupUsers: gUsers[];
   setIsMembersActive: React.Dispatch<React.SetStateAction<boolean>>;
   isActive: groupsObj | null;
+  setGroupUsers: React.Dispatch<React.SetStateAction<gUsers[]>>;
 }) {
+  const makeAdmin = async (userId: number) => {
+    try {
+      if (!isActive || !userId) {
+        return;
+      }
+      const res: AxiosResponse = await axios.put(
+        `http://localhost:3000/api/user/${userId}/${isActive.id}`,
+        null,
+        {
+          headers: { Authorization: localStorage.getItem("token") },
+        },
+      );
+      alert(`${res.data.msg}`);
+      const updatedGroupUsers = groupUsers.map((groupUser) =>
+        groupUser.id === userId ? { ...groupUser, isAdmin: true } : groupUser,
+      );
+      setGroupUsers(updatedGroupUsers);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const removeUser = async (userId: number, name: string) => {
+    try {
+      if (!userId || !isActive) {
+        return;
+      }
+      const res: AxiosResponse = await axios.delete(
+        `http://localhost:3000/api/user/${userId}/group/${isActive.id}`,
+        {
+          headers: { Authorization: localStorage.getItem("token") },
+        },
+      );
+      alert(`${name} has been removed from ${isActive.name}`);
+      setGroupUsers((prevGroupUsers) =>
+        prevGroupUsers.filter((user) => user.id !== userId),
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <>
       <h1 className="mt-2 text-center font-semibold">Group Members</h1>
@@ -26,10 +69,16 @@ export default function GroupUsers({
                   <span className="text-sm font-semibold">Admin</span>
                 ) : isActive?.isAdmin ? (
                   <>
-                    <button className="rounded bg-blue-500 p-2 text-sm text-white">
+                    <button
+                      className="rounded bg-blue-500 p-2 text-sm text-white"
+                      onClick={() => makeAdmin(user.id)}
+                    >
                       Make admin
                     </button>
-                    <button className="rounded bg-blue-500 p-2 text-sm text-white">
+                    <button
+                      className="rounded bg-blue-500 p-2 text-sm text-white"
+                      onClick={() => removeUser(user.id, user.name)}
+                    >
                       Remove
                     </button>
                   </>
