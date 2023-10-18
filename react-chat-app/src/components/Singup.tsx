@@ -102,8 +102,8 @@ export default function Signup({ user }: { user: string | null }) {
           </div>
         </>
       ) : (
-        <div className="absolute left-0 top-64 w-full p-4 text-center">
-          <p className="text-xl text-blue-500 hover:underline">
+        <div className="absolute left-0 top-64 flex w-full justify-center ">
+          <p className="m w-fit rounded-md bg-blue-500 p-4 text-xl font-semibold text-white">
             <Link to="/main">
               start creating groups and chatting with your friends
             </Link>

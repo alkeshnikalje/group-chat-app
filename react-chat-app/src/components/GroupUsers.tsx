@@ -23,9 +23,7 @@ export default function GroupUsers({
               <span className="font-semibold">{user.name}</span>
               <div className="flex items-center space-x-2">
                 {user.isAdmin ? (
-                  <span className="text-sm font-semibold">
-                    Admin of the group
-                  </span>
+                  <span className="text-sm font-semibold">Admin</span>
                 ) : isActive?.isAdmin ? (
                   <>
                     <button className="rounded bg-blue-500 p-2 text-sm text-white">

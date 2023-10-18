@@ -77,11 +77,13 @@ export default function SignIn({ user }: { user: string | null }) {
           </div>
         </>
       ) : (
-        <>
-          <Link to="/main" className="text-xl text-blue-500 hover:underline">
-            start creating groups and chatting with your friends
-          </Link>
-        </>
+        <div className="absolute left-0 top-64 flex w-full justify-center ">
+          <p className="m w-fit rounded-md bg-blue-500 p-4 text-xl font-semibold text-white">
+            <Link to="/main">
+              start creating groups and chatting with your friends
+            </Link>
+          </p>
+        </div>
       )}
     </div>
   );
