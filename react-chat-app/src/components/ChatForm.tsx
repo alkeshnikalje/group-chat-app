@@ -5,19 +5,24 @@ import { AxiosResponse } from "axios";
 
 export default function ChatForm({
   setMessages,
+  isActiveId,
 }: {
   setMessages: React.Dispatch<React.SetStateAction<messageObj[]>>;
+  isActiveId: number | undefined;
 }) {
   const [message, setMessage] = useState("");
 
   const handleOnSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      if (!isActiveId) {
+        return;
+      }
       const textObj = {
         text: message,
       };
       const res: AxiosResponse = await axios.post(
-        "http://localhost:3000/api/user/chats",
+        `http://localhost:3000/api/user/chats/${isActiveId}`,
         textObj,
         {
           headers: { Authorization: localStorage.getItem("token") },

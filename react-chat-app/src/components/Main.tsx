@@ -5,11 +5,11 @@ import ChatForm from "./ChatForm";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { AxiosResponse } from "axios";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import GroupContainer from "./Groupcontainer";
 import GroupUsers from "./GroupUsers";
 import { gUsers } from "../App";
-
+import Loader from "./Loader";
 export interface messageObj {
   id: number;
   text: string;
@@ -37,6 +37,8 @@ export default function Main({
   const [groups, setGroups] = useState<groupsObj[]>([]);
   const [isActive, setIsActive] = useState<groupsObj | null>(null);
   const [isMembersActive, setIsMembersActive] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  console.log(isLoading);
   const isActiveId = isActive?.id;
   const numberOfUsersInTheGroup = groupUsers.length;
   const getGroups = async () => {
@@ -55,7 +57,7 @@ export default function Main({
   useEffect(() => {
     getGroups();
   }, []);
-  const navigate = useNavigate();
+
   const getChats = async () => {
     try {
       if (!isActive) {
@@ -69,6 +71,7 @@ export default function Main({
       );
       const chats: messageObj[] = res.data.chats;
       setMessages(chats);
+      setIsLoading(false);
       // Update local storage with the merged chats
       // localStorage.setItem("messages", JSON.stringify(updatedChats));
     } catch (error) {
@@ -97,6 +100,7 @@ export default function Main({
   useEffect(() => {
     // Load old messages from local storage when the component mounts
     getGroupUsers();
+    setIsLoading(true);
     // const storedMessages = localStorage.getItem("messages");
     // if (storedMessages) {
     //   setMessages(JSON.parse(storedMessages));
@@ -128,8 +132,13 @@ export default function Main({
             numberOfUsersInTheGroup={numberOfUsersInTheGroup}
             setIsMembersActive={setIsMembersActive}
           />
-          <ChatSection messages={messages} id={id} />
-          <ChatForm setMessages={setMessages} />
+          {!isLoading ? (
+            <ChatSection messages={messages} id={id} />
+          ) : (
+            <Loader />
+          )}
+
+          <ChatForm setMessages={setMessages} isActiveId={isActiveId} />
         </ChildMain>
       )}
       {!id && (

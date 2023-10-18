@@ -96,7 +96,7 @@ export default function GroupContainer(props: PropTypes) {
             }`}
             onClick={() => sortGroups(group)}
           >
-            <span>{group.name}</span>
+            <span className="text-lg font-semibold">{group.name}</span>
             {group.isAdmin ? (
               <div className="ml-2 flex space-x-2">
                 <button
