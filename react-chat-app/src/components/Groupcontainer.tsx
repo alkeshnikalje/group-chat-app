@@ -76,9 +76,7 @@ export default function GroupContainer(props: PropTypes) {
           value={groupName}
           onChange={(e) => setGroupName(e.target.value)}
         />
-        <button className="w-1/3 rounded-r bg-blue-500 py-1 text-white">
-          Create
-        </button>
+        <button className="w-1/3  bg-blue-500 py-1 text-white">Create</button>
       </form>
       <div className=" text-center text-lg font-semibold">
         {props.groups.length > 0
