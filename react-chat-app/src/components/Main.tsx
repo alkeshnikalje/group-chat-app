@@ -17,6 +17,7 @@ export interface messageObj {
   createdAt: Date | string;
   updatedAt: Date | string;
   userId: number;
+  groupId: number;
 }
 export interface groupsObj {
   id: number;
@@ -38,7 +39,7 @@ export default function Main({
   const [isActive, setIsActive] = useState<groupsObj | null>(null);
   const [isMembersActive, setIsMembersActive] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  console.log(isLoading);
+
   const isActiveId = isActive?.id;
   const numberOfUsersInTheGroup = groupUsers.length;
   const getGroups = async () => {
@@ -107,11 +108,7 @@ export default function Main({
     // }
 
     // Fetch new messages at regular intervals
-    const intervalId = setInterval(getChats, 1000);
-
-    return () => {
-      clearInterval(intervalId);
-    };
+    getChats();
   }, [isActiveId]);
 
   const mainElements = (
