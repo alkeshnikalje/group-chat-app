@@ -2,6 +2,8 @@ import { useState } from "react";
 import { groupsObj } from "./Main";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import io from "socket.io-client";
+export const socket = io("http://localhost:3000");
 interface PropTypes {
   groups: groupsObj[];
   isActive: groupsObj | null;
@@ -53,6 +55,7 @@ export default function GroupContainer(props: PropTypes) {
         props.setGroups(filteredGroups);
         if (filteredGroups.length > 0) {
           props.setIsActive(filteredGroups[filteredGroups.length - 1]);
+          socket.emit("join", filteredGroups[filteredGroups.length - 1].id);
         }
       }
     } catch (err) {
@@ -62,6 +65,7 @@ export default function GroupContainer(props: PropTypes) {
 
   const sortGroups = (group: groupsObj) => {
     props.setIsActive(group);
+    socket.emit("join", group.id);
     const notSelectedGroups = props.groups.filter((grp) => grp !== group);
     props.setGroups([group, ...notSelectedGroups]);
   };

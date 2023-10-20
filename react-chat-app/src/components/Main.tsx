@@ -10,6 +10,7 @@ import GroupContainer from "./Groupcontainer";
 import GroupUsers from "./GroupUsers";
 import { gUsers } from "../App";
 import Loader from "./Loader";
+import { socket } from "./Groupcontainer";
 export interface messageObj {
   id: number;
   text: string;
@@ -50,6 +51,7 @@ export default function Main({
       const groups = res.data.userBelongsTo;
       setGroups(groups);
       setIsActive(groups[0]);
+      socket.emit("join", groups[0].id);
     } catch (error) {
       console.log(error);
     }
