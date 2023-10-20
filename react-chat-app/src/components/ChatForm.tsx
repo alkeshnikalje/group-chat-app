@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { messageObj } from "../components/Main";
 import axios from "axios";
 import { AxiosResponse } from "axios";
-
+import { socket } from "./Groupcontainer";
 export default function ChatForm({
   setMessages,
   isActiveId,
@@ -11,6 +11,19 @@ export default function ChatForm({
   isActiveId: number | undefined;
 }) {
   const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    // Listen for the "message" event from the server
+    socket.on("message", (data) => {
+      // Update the chat messages state with the new message
+      setMessages((messages) => [...messages, data]);
+    });
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      socket.off("message");
+    };
+  }, [socket]);
 
   const handleOnSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,6 +43,7 @@ export default function ChatForm({
       );
       const chat: messageObj = res.data.newChat;
       setMessages((message) => [...message, chat]);
+      socket.emit("chatMessage", chat);
       setMessage("");
     } catch (err) {
       console.log(err);
