@@ -12,18 +12,19 @@ exports.sendText = async (req, res) => {
         .status(400)
         .json({ success: false, msg: "you have not written anything" });
     }
-    const [user, member] = await Promise.all([
+    const [user, member, group] = await Promise.all([
       User.findByPk(id),
       UserGroup.findOne({ where: { groupId: req.params.groupId, userId: id } }),
+      Group.findByPk(req.params.groupId),
     ]);
-
+    if (!group) {
+      return res.status(404).json({ success: false, msg: "group not found" });
+    }
     if (!member) {
-      return res
-        .status(401)
-        .json({
-          success: false,
-          msg: "either the group does not exist or you are not the member of this group",
-        });
+      return res.status(401).json({
+        success: false,
+        msg: "you are not the member of this group",
+      });
     }
     const newChat = await Chat.create({
       text,

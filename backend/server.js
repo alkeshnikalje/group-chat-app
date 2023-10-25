@@ -39,7 +39,7 @@ io.on("connection", (socket) => {
   socket.on("chatMessage", (data) => {
     // Handle chat message events
     if (data.groupId !== data.groupId) return;
-    socket.to(data.groupId).emit("message", data); // Broadcast the message to all connected clients
+    socket.to(data.groupId).emit("message", data);
   });
   socket.on("disconnect", () => {
     console.log("A user disconnected.");
