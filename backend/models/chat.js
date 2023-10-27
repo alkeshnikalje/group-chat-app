@@ -10,7 +10,9 @@ const Chat = sequelize.define("chats", {
   },
   text: {
     type: Sequelize.STRING,
-    allowNull: false,
+  },
+  multiMediaUrl: {
+    type: Sequelize.STRING,
   },
   name: {
     type: Sequelize.STRING,

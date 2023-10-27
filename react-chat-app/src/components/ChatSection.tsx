@@ -21,11 +21,28 @@ export default function ChatSection({
           >
             {message.userId === id ? (
               <span className="rounded-md bg-blue-500 pb-2 pl-1 pr-1 pt-2 ">
-                {message.text}
+                {message.text ? (
+                  message.text
+                ) : (
+                  <a href={message.multiMediaUrl ? message.multiMediaUrl : ""}>
+                    you sent a file.
+                  </a>
+                )}
               </span>
             ) : (
               <>
-                <span className="rounded-md bg-gray-300 pb-2 pl-1 pr-1 pt-2 ">{`${message.name}: ${message.text}`}</span>
+                <span className="rounded-md bg-gray-300 pb-2 pl-1 pr-1 pt-2 ">
+                  {`${message.name}: `}
+                  {message.text ? (
+                    message.text
+                  ) : (
+                    <a
+                      href={message.multiMediaUrl ? message.multiMediaUrl : ""}
+                    >
+                      sent a file. Download now
+                    </a>
+                  )}
+                </span>
               </>
             )}
           </div>

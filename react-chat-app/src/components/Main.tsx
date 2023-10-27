@@ -13,7 +13,8 @@ import Loader from "./Loader";
 import { socket } from "./Groupcontainer";
 export interface messageObj {
   id: number;
-  text: string;
+  text: string | null;
+  multiMediaUrl: string | null;
   name: string;
   createdAt: Date | string;
   updatedAt: Date | string;
