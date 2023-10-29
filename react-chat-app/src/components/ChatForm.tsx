@@ -79,8 +79,8 @@ export default function ChatForm({
   };
 
   return (
-    <div className="flex h-[10%]">
-      <form className="flex w-[95%]" onSubmit={handleOnSubmit}>
+    <>
+      <form className="flex h-[6%]" onSubmit={handleOnSubmit}>
         <input
           type="text"
           className="w-full border-t p-2 focus:border-blue-500 focus:outline-none"
@@ -91,16 +91,17 @@ export default function ChatForm({
         <button className="bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 focus:outline-none">
           Send
         </button>
-
+      </form>
+      <div className=" flex h-[4%] w-full justify-center">
         <input type="file" id="mediaInput" hidden onChange={handleFileChange} />
 
         <label
           htmlFor="mediaInput"
-          className=" bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 focus:outline-none"
+          className=" w-full cursor-pointer bg-gray-500 px-4 pt-1 text-center text-white hover:bg-gray-600 focus:outline-none"
         >
-          Upload
+          Upload a image/video file
         </label>
-      </form>
-    </div>
+      </div>
+    </>
   );
 }
