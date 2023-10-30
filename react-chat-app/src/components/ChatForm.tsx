@@ -31,6 +31,9 @@ export default function ChatForm({
       if (!isActiveId) {
         return;
       }
+      if (!message) {
+        return;
+      }
       const textObj = {
         text: message,
       };
@@ -97,7 +100,7 @@ export default function ChatForm({
 
         <label
           htmlFor="mediaInput"
-          className=" w-full cursor-pointer bg-gray-500 px-4 pt-1 text-center text-white hover:bg-gray-600 focus:outline-none"
+          className=" w-full cursor-pointer bg-gray-200 px-4 pt-1 text-center font-semibold text-black hover:bg-gray-300 focus:outline-none"
         >
           Upload a image/video file
         </label>
