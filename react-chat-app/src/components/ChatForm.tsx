@@ -62,7 +62,6 @@ export default function ChatForm({
       const formData = new FormData();
       formData.append("file", file);
       console.log(file);
-      console.log(formData);
       const res: AxiosResponse = await axios.post(
         `http://localhost:3000/api/user/multiMedia/${isActiveId}`,
         formData,

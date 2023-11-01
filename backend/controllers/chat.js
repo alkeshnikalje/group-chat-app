@@ -3,7 +3,7 @@ const Chat = require("../models/chat");
 const { Op } = require("sequelize");
 const UserGroup = require("../models/usergroup");
 const Group = require("../models/group");
-const AWS = require("aws-sdk");
+const { UploadFileToS3 } = require("../services/awss3");
 
 exports.sendText = async (req, res) => {
   try {
@@ -63,32 +63,15 @@ exports.sendMultimedia = async (req, res) => {
       });
     }
     const filename = `${userId}${file.originalname}`;
-
-    let S3bucket = new AWS.S3({
-      accessKeyId: process.env.S3ACCESS_KEY,
-      secretAccessKey: process.env.S3ACCESS_SECRET,
+    const buffer = file.buffer;
+    const fileUrl = await UploadFileToS3(filename, buffer);
+    const newChat = await Chat.create({
+      multiMediaUrl: fileUrl,
+      userId,
+      name: user.name,
+      groupId: member.groupId,
     });
-    var params = {
-      Bucket: process.env.BUCKET,
-      Key: filename,
-      Body: file.buffer,
-      ACL: "public-read",
-    };
-
-    S3bucket.upload(params, async (err, response) => {
-      if (err) {
-        console.log(err);
-        return;
-      }
-      const newChat = await Chat.create({
-        multiMediaUrl: response.Location,
-        userId,
-        name: user.name,
-        groupId: member.groupId,
-      });
-
-      return res.status(201).json({ success: true, newChat });
-    });
+    return res.status(201).json({ success: true, newChat });
   } catch (err) {
     return res.status(500).json({ success: false, msg: err.message });
   }
