@@ -56,6 +56,8 @@ export default function GroupContainer(props: PropTypes) {
         if (filteredGroups.length > 0) {
           props.setIsActive(filteredGroups[filteredGroups.length - 1]);
           socket.emit("join", filteredGroups[filteredGroups.length - 1].id);
+        } else {
+          props.setIsActive(null);
         }
       }
     } catch (err) {
