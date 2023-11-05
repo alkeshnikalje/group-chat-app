@@ -48,8 +48,8 @@ export default function ChatForm({
       setMessages((message) => [...message, chat]);
       socket.emit("chatMessage", chat);
       setMessage("");
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      console.log(error);
     }
   };
 
