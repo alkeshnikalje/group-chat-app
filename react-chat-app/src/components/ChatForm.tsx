@@ -56,9 +56,7 @@ export default function ChatForm({
   const handleFileChange = async (e: any) => {
     try {
       const file = e.target.files[0];
-      if (!file) {
-        return;
-      }
+      if (!file) return;
       const formData = new FormData();
       formData.append("file", file);
       console.log(file);
