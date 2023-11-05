@@ -6,7 +6,7 @@ import SignIn from "./components/Signin";
 import AppBar from "./components/AppBar";
 import Main from "./components/Main";
 import Users from "./components/Users";
-import GroupUsers from "./components/GroupUsers";
+
 export interface UsersObj {
   id: number;
   name: string;
@@ -45,8 +45,8 @@ function App() {
       });
       const fetchedUsers: UsersObj[] = res.data.users;
       setUsers(fetchedUsers);
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      console.log(error);
     }
   };
 
