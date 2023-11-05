@@ -45,8 +45,8 @@ function App() {
       });
       const fetchedUsers: UsersObj[] = res.data.users;
       setUsers(fetchedUsers);
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      console.log(err);
     }
   };
 
